@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans properties="classpath:app.properties">
+    <bean id="repository" class="com.interview.minispring.SampleBeans$MemoryUserRepository"/>
+
+    <bean id="greetingService"
+          class="com.interview.minispring.SampleBeans$DefaultGreetingService"
+          init-method="start"
+          destroy-method="stop">
+        <property name="repository" ref="repository"/>
+        <property name="prefix" value="${greeting.prefix}"/>
+    </bean>
+
+    <bean id="prototypeCounter"
+          class="com.interview.minispring.SampleBeans$Counter"
+          scope="prototype"/>
+
+    <bean id="lazyCounter"
+          class="com.interview.minispring.SampleBeans$Counter"
+          lazy="true"/>
+
+    <bean id="pointcut" class="com.interview.minispring.aop.support.NameMatchMethodPointcut">
+        <property name="mappedName" value="greet"/>
+    </bean>
+
+    <bean id="beforeAdvice" class="com.interview.minispring.SampleBeans$TraceBeforeAdvice"/>
+
+    <bean id="advisor" class="com.interview.minispring.aop.support.DefaultAdvisor">
+        <property name="pointcut" ref="pointcut"/>
+        <property name="advice" ref="beforeAdvice"/>
+    </bean>
+
+    <bean id="autoProxyCreator" class="com.interview.minispring.aop.framework.AutoProxyCreator"/>
+</beans>
